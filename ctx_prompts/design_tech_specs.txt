@@ -15,10 +15,6 @@
 ### Filesystem Access
 - **Local Filesystem API**: Backend uses Python's built-in `os` and `shutil` libraries for filesystem operations.
 
-### Development Tools
-- **Version Control**: Git, for source code management.
-- **IDEs**: Visual Studio Code or PyCharm for backend (Python), and Visual Studio Code for frontend (JavaScript/React).
-
 ### Testing Frameworks
 - **Backend Testing**: pytest, for testing Flask applications.
 - **Frontend Testing**: Jest, alongside React Testing Library, for unit and integration tests.
