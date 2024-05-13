@@ -1,0 +1,11 @@
+The folder structure for a Flask application serving a single-page application with HTML, CSS, and JavaScript files is as follows:
+- `app.py`: Contains the Flask application setup and routes.
+- `templates`: Directory for HTML files.
+  - `index.html`: The main page.
+- `static`: Directory for static files.
+  - `css`: Subdirectory for CSS files.
+    - `style.css`: CSS stylesheet.
+  - `js`: Subdirectory for JavaScript files.
+    - `script.js`: JavaScript file. 
+- `sessions`: Directory for saving and loading files, with subfolders for each session.
+

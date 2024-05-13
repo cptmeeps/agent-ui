@@ -1,0 +1,6 @@
+# flask app.py
+1. Ensure Flask is installed: `pip install Flask Flask-CORS`
+2. Set environment variable:
+   - Windows: `set FLASK_APP=app.py`
+   - Linux/Mac: `export FLASK_APP=app.py`
+3. Run the app: `flask run`

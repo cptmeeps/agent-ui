@@ -1,0 +1,7 @@
+I am building an ai agent ui application. 
+
+Right now I am in the prototype phase so I will be doing all my development locally.
+
+I would like to use a flask server to serve as a mock backend. And I will be returning html, css and plain javascript files. Their will only be a single page (index.html) so no complicated routing is needed. 
+
+I want the locally run flask app to access the local file system. 
