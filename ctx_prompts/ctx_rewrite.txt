@@ -1,1 +1,1 @@
-That looks good can you rewrite the list so that it can be used as context prompt for asking a large language model for further instructions.
+That looks good. But can you rewrite it so it can be used as context prompt for asking a large language model for further instructions.

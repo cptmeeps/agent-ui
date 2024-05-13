@@ -1,0 +1,30 @@
+## System Architecture
+
+### Overview
+The system is divided into two main components: the Backend Server and the Frontend Application. These components interact with each other over HTTP/HTTPS, with the Backend Server also interfacing with external Large Language Model APIs and the local filesystem.
+
+### Component Interactions
+- **Frontend Application** sends HTTP requests to the Backend Server for various operations, such as AI model interactions, file uploads/downloads, and configuration settings.
+- **Backend Server** processes these requests, performing actions such as calling external APIs, accessing the filesystem, and returning responses to the Frontend.
+- **API Integration Service** within the Backend Server communicates with external Large Language Model APIs, sending requests and processing responses.
+- **Filesystem Service** in the Backend Server manages local file operations, including reading, writing, and modifying files as requested by the Frontend.
+
+### Data Flow
+- User interacts with the **Frontend Application**, initiating actions like sending text for AI processing, uploading files, or changing settings.
+- **Frontend Application** sends appropriate requests to the **Backend Server** via HTTP/HTTPS.
+- **Backend Server**:
+   - For AI requests, uses the **API Integration Service** to communicate with external APIs, processes the response, and sends it back to the Frontend.
+   - For file operations, uses the **Filesystem Service** to perform the requested action and responds to the Frontend accordingly.
+   - For settings/configuration, stores or updates the information and confirms the action to the Frontend.
+- Responses are received by the **Frontend Application** and presented to the user.
+
+### Architecture Diagram
+```
+[User]
+  |
+  v
+[Frontend Application] -- HTTP/HTTPS -- [Backend Server] -- HTTP/HTTPS -- [External Large Language Model APIs]
+  |                                           |
+  |                                           |
+  |------ Local File Operations <------------|
+```

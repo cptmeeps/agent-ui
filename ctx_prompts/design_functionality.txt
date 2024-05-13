@@ -1,0 +1,24 @@
+## Functionality
+
+### Backend Server:
+  - Run as a local web server.
+  - Handle HTTP requests from the frontend.
+  - Interface with external large language model APIs.
+  - Access and manipulate the local filesystem.
+  - Serve the frontend application.
+
+### Frontend Application:
+  - Provide a user interface for AI model interactions.
+  - Display AI model responses.
+  - Support file uploads and downloads.
+  - Configuration interface for settings and API keys.
+
+### API Integration:
+  - Manage API keys securely.
+  - Format and send requests to AI APIs.
+  - Process and present AI model responses.
+
+### Filesystem Interaction:
+  - Enable browsing of local files.
+  - Support file uploads for processing.
+  - Save outputs and results locally.

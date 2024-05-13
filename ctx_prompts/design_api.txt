@@ -1,0 +1,95 @@
+## API Design
+
+### Endpoints
+
+#### User Configuration
+- **GET /api/user/config**  
+  Retrieves the current user configuration settings.
+  - **Response**: JSON object of user settings.
+
+- **POST /api/user/config**  
+  Updates user configuration settings.
+  - **Request**: JSON object with settings to update.
+  - **Response**: Success or error message.
+
+#### AI Model Interaction
+- **POST /api/ai/query**  
+  Sends text to the AI model and retrieves the response.
+  - **Request**: JSON object with `text` field.
+  - **Response**: AI model's response as a JSON object.
+
+#### File Management
+- **GET /api/files/list**  
+  Lists files available in the specified directory.
+  - **Request**: Query parameter with `path` of the directory.
+  - **Response**: JSON array of files and directories.
+
+- **POST /api/files/upload**  
+  Uploads a file to the server.
+  - **Request**: Form data with the file.
+  - **Response**: Success or error message.
+
+- **GET /api/files/download/{fileId}**  
+  Downloads a file from the server.
+  - **Response**: File stream.
+
+#### API Interaction Logs
+- **GET /api/logs**  
+  Retrieves a list of API interaction logs for the user.
+  - **Response**: JSON array of API interaction logs.
+
+### Request/Response Formats
+
+#### General Response Structure
+```json
+{
+  "status": "success",
+  "data": {},
+  "message": "Optional error or success message"
+}
+```
+
+#### AI Query Request
+```json
+{
+  "text": "Your query text here"
+}
+```
+
+#### AI Query Response
+```json
+{
+  "response": "AI model's response text"
+}
+```
+
+#### File Upload Response
+```json
+{
+  "status": "success",
+  "message": "File uploaded successfully"
+}
+```
+
+#### File List Response
+```json
+{
+  "files": [
+    {
+      "name": "example.txt",
+      "path": "/path/to/example.txt",
+      "type": "file",
+      "size": 1024
+    },
+    {
+      "name": "documents",
+      "path": "/path/to/documents",
+      "type": "directory"
+    }
+  ]
+}
+```
+
+### Methods
+- **GET**: Used for retrieving data (e.g., user config, file list, download files, API logs).
+- **POST**: Used for sending data to the server (e.g., update config, AI queries, upload files).

@@ -1,4 +1,0 @@
-Requirements:
-- flask : Flask to create and run the web server.
-- flask_cors : Flask-CORS to enable Cross-Origin Resource Sharing (CORS).
-- debug_mode : Debug mode for development to enable auto-reload and provide debug information.

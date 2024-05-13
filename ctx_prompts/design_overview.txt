@@ -1,0 +1,11 @@
+## Project Overview
+
+### Background
+The project involves developing an AI agent UI application designed to run locally during the prototyping phase. This application aims to leverage the capabilities of large language models by integrating with external APIs, providing a sophisticated interface for interaction and data processing.
+
+### Key Features and Objectives
+- **Local Backend Web Server**: A server that runs locally, handling requests from the frontend, accessing the local filesystem, and making calls to external large language model APIs.
+- **Browser-Based Frontend**: An intuitive user interface accessible through a web browser, designed for ease of use, allowing users to interact with the AI models and view responses.
+- **Integration with Large Language Model APIs**: Capability to connect with external APIs of large language models, enabling the application to leverage advanced AI functionalities.
+- **Local Filesystem Access**: The backend can interact with the local filesystem, allowing for the processing of local data and storage of results.
+- **Prototype Focus**: While in the prototyping phase, the application is designed for local use to facilitate rapid development and testing.

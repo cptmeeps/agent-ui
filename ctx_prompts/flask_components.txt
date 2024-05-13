@@ -1,6 +1,0 @@
-Components:
-- init_flask : Initialize Flask application in `app.py`.
-- integrate_flask_cors : Integrate Flask-CORS for cross-origin requests handling.
-- enable_debug_mode : Enable debug mode in Flask for development purposes.
-- define_route_for_index : Define a route in Flask to serve `index.html`.
-- configure_static_serving : Configure Flask to serve static files (CSS and JavaScript) from the `static` directory.
