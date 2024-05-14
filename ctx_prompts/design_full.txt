@@ -1,0 +1,348 @@
+# AI Agent UI - Engineering Design 
+
+## Project Overview
+
+### Background
+
+The project involves developing an AI agent UI application designed to run locally during the prototyping phase. This application aims to leverage the capabilities of large language models by integrating with external APIs, providing a sophisticated interface for interaction and data processing.
+
+### Key Features and Objectives
+
+- **Local Backend Web Server**: A server that runs locally, handling requests from the frontend, accessing the local filesystem, and making calls to external large language model APIs.
+- **Browser-Based Frontend**: An intuitive user interface accessible through a web browser, designed for ease of use, allowing users to interact with the AI models and view responses.
+- **Integration with Large Language Model APIs**: Capability to connect with external APIs of large language models, enabling the application to leverage advanced AI functionalities.
+- **Local Filesystem Access**: The backend can interact with the local filesystem, allowing for the processing of local data and storage of results.
+- **User Sessions**: Each user session creates a folder in the local filesystem to contain files created or downloaded during that session. Users can load a session by submitting a session name in the UI.
+- **Prototype Focus**: While in the prototyping phase, the application is designed for local use to facilitate rapid development and testing.
+
+## Functionality
+
+### Backend Server:
+
+- Run as a local web server.
+- Handle HTTP requests from the frontend.
+- Interface with external large language model APIs.
+- Access and manipulate the local filesystem.
+- Serve the frontend application.
+- Manage user sessions and corresponding folders.
+- Interact with the database to store and retrieve user configurations, API interaction logs, and file metadata.
+
+### Frontend Application:
+
+- Provide a user interface for AI model interactions.
+- Display AI model responses.
+- Support file uploads and downloads.
+- Configuration interface for settings and API keys.
+- Session management interface for creating and loading sessions.
+
+### API Integration:
+
+- Manage API keys securely.
+- Format and send requests to AI APIs.
+- Process and present AI model responses.
+
+### Filesystem Interaction:
+
+- Enable browsing of local files.
+- Support file uploads for processing.
+- Save outputs and results locally.
+- Manage session-specific folders.
+
+## Engineering Components
+
+### Backend Server
+
+- **Local Web Server**: Utilizes frameworks like Flask (Python) or Express.js (Node.js) to run a local server.
+- **Request Handler**: Module to process incoming HTTP requests, parsing paths, headers, and data.
+- **API Integration Service**: Handles the construction, sending, and receiving of requests to external large language model APIs, including authentication and error handling.
+- **Filesystem Service**: Provides functionalities for reading from and writing to the local filesystem, including file manipulation, directory traversal, and session folder management.
+- **Response Service**: Formats and sends responses to the frontend, including AI responses and file data.
+- **Session Manager**: Manages user sessions, creating and loading session-specific folders.
+- **Database Service**: Interacts with the database to store and retrieve user configurations, API interaction logs, and file metadata.
+
+### Frontend Application
+
+- **UI Components**: Built with HTML, CSS, and JavaScript frameworks like React or Vue.js for dynamic content rendering.
+- **API Client**: JavaScript module for sending and receiving HTTP requests to/from the backend server.
+- **File Management Interface**: Allows users to upload and download files, and view local files available for processing.
+- **Settings and Configuration**: Interface for inputting and storing API keys and other configuration settings, possibly using local storage or passed to the backend for secure storage.
+- **Session Management Interface**: Allows users to create and load sessions by submitting session names.
+
+### API Integration
+
+- **Key Management**: Secure storage and retrieval mechanism for API keys, possibly using environment variables or encrypted storage solutions.
+- **Request Formatter**: Constructs requests to fit the API specifications of the large language models, including query parameters and body formatting.
+- **Response Processor**: Parses and formats the responses from the AI APIs for presentation in the frontend UI.
+
+### Filesystem Interaction
+
+- **File Browser**: Allows users to navigate their local filesystem through the UI, implemented via calls to the backend for directory contents.
+- **Upload/Download Manager**: Handles file uploads from the user to the backend for processing, and downloads of processed files or results back to the user.
+- **Session Folder Manager**: Creates and manages session-specific folders in the local filesystem.
+
+### Database Interaction
+
+- **ORM (Object-Relational Mapping)**: Utilizes an ORM like SQLAlchemy (Python) or Sequelize (Node.js) to interact with the database.
+- **User Configuration Model**: Manages user-specific settings and API keys.
+- **API Interaction Log Model**: Logs interactions with external APIs.
+- **File Metadata Model**: Stores metadata about files uploaded, processed, and downloaded.
+
+## Technical Specifications
+
+### Programming Languages and Frameworks
+
+- **Backend Server**: Python with Flask. Flask is chosen for its simplicity and suitability for prototyping a local web server.
+- **Frontend Application**: JavaScript with React. React is selected for its component-based architecture, facilitating the development of a dynamic and responsive UI.
+- **Database**: SQLite for local development and prototyping, with potential to switch to PostgreSQL or MySQL for production.
+
+### Protocols and Data Formats
+
+- **HTTP/HTTPS**: For communication between the frontend and backend. HTTPS for secure data transmission if deploying publicly in the future.
+- **JSON**: Standard data format for sending and receiving API requests and responses, and for frontend-backend communication.
+
+### External API Integration
+
+- **RESTful APIs**: Interaction with large language model APIs using REST principles.
+- **OAuth 2.0**: For secure API authentication where necessary.
+
+### Filesystem Access
+
+- **Local Filesystem API**: Backend uses Python's built-in `os` and `shutil` libraries for filesystem operations.
+
+### Database Access
+
+- **ORM**: SQLAlchemy (Python) for database interactions, providing an abstraction layer over raw SQL queries.
+
+### Testing Frameworks
+
+- **Backend Testing**: pytest, for testing Flask applications.
+- **Frontend Testing**: Jest, alongside React Testing Library, for unit and integration tests.
+
+### Deployment
+
+- **Local Deployment**: The application is designed to run locally during the prototyping phase, with potential for containerization (using Docker) for ease of setup and consistency across development environments.
+
+## Data Model Design
+
+### Models
+
+### User Configuration
+
+- **ID**: Primary Key, Integer, Auto-increment.
+- **APIKey**: String, Encrypted.
+- **Settings**: JSON, Stores user-specific settings like UI preferences.
+- **CreatedAt**: DateTime, Record creation timestamp.
+- **UpdatedAt**: DateTime, Last record update timestamp.
+
+### API Interaction Log
+
+- **ID**: Primary Key, Integer, Auto-increment.
+- **UserID**: Foreign Key, References User Configuration.
+- **APIEndpoint**: String, Specifies the API endpoint accessed.
+- **RequestPayload**: Text, Stores the request sent to the API.
+- **ResponsePayload**: Text, Stores the response received from the API.
+- **Status**: String, Indicates the result status (e.g., success, error).
+- **CreatedAt**: DateTime, Record creation timestamp.
+
+### File Metadata
+
+- **ID**: Primary Key, Integer, Auto-increment.
+- **UserID**: Foreign Key, References User Configuration.
+- **SessionName**: String, Name of the session.
+- **FileName**: String, Name of the file.
+- **FilePath**: String, Path of the file in the local filesystem.
+- **FileType**: String, Indicates the type of the file (e.g., text, image).
+- **Size**: Integer, File size in bytes.
+- **CreatedAt**: DateTime, Record creation timestamp.
+- **UpdatedAt**: DateTime, Last record update timestamp.
+
+### Database Schema
+
+- Tables: `UserConfiguration`, `APIInteractionLog`, `FileMetadata`.
+- Relationships:
+    - `UserConfiguration` has many `APIInteractionLog`.
+    - `UserConfiguration` has many `FileMetadata`.
+
+### Constraints and Indexes
+
+- **User Configuration**: Unique constraint on `APIKey`.
+- **API Interaction Log**: Index on `UserID`, `APIEndpoint` for faster query performance.
+- **File Metadata**: Index on `UserID`, `SessionName`, `FileType` for efficient file type filtering.
+
+### Data Integrity and Security
+
+- **Foreign Key Constraints**: Ensure referential integrity between `UserConfiguration`, `APIInteractionLog`, and `FileMetadata`.
+- **Encryption**: Sensitive information like `APIKey` in `UserConfiguration` is encrypted for security.
+- **Timestamps**: `CreatedAt` and `UpdatedAt` fields provide audit trails for records.
+
+## API Design
+
+### Endpoints
+
+### User Configuration
+
+- **GET /api/user/config**
+    
+    Retrieves the current user configuration settings.
+    
+    - **Response**: JSON object of user settings.
+- **POST /api/user/config**
+    
+    Updates user configuration settings.
+    
+    - **Request**: JSON object with settings to update.
+    - **Response**: Success or error message.
+
+### AI Model Interaction
+
+- **POST /api/ai/query**
+    
+    Sends text to the AI model and retrieves the response.
+    
+    - **Request**: JSON object with `text` field.
+    - **Response**: AI model's response as a JSON object.
+
+### File Management
+
+- **GET /api/files/list**
+    
+    Lists files available in the specified directory.
+    
+    - **Request**: Query parameter with `path` of the directory.
+    - **Response**: JSON array of files and directories.
+- **POST /api/files/upload**
+    
+    Uploads a file to the server.
+    
+    - **Request**: Form data with the file.
+    - **Response**: Success or error message.
+- **GET /api/files/download/{fileId}**
+    
+    Downloads a file from the server.
+    
+    - **Response**: File stream.
+
+### API Interaction Logs
+
+- **GET /api/logs**
+    
+    Retrieves a list of API interaction logs for the user.
+    
+    - **Response**: JSON array of API interaction logs.
+
+### User Sessions
+
+- **POST /api/session/create**
+    
+    Creates a new user session with the specified name.
+    
+    - **Request**: JSON object with `sessionName` field.
+    - **Response**: Success or error message.
+- **POST /api/session/load**
+    
+    Loads an existing user session by name.
+    
+    - **Request**: JSON object with `sessionName` field.
+    - **Response**: JSON object with session details and file list.
+
+### Request/Response Formats
+
+### General Response Structure
+
+```json
+{
+  "status": "success",
+  "data": {},
+  "message": "Optional error or success message"
+}
+
+```
+
+### AI Query Request
+
+```json
+{
+  "text": "Your query text here"
+}
+
+```
+
+### AI Query Response
+
+```json
+{
+  "response": "AI model's response text"
+}
+
+```
+
+### File Upload Response
+
+```json
+{
+  "status": "success",
+  "message": "File uploaded successfully"
+}
+
+```
+
+### File List Response
+
+```json
+{
+  "files": [
+    {
+      "name": "example.txt",
+      "path": "/path/to/example.txt",
+      "type": "file",
+      "size": 1024
+    },
+    {
+      "name": "documents",
+      "path": "/path/to/documents",
+      "type": "directory"
+    }
+  ]
+}
+
+```
+
+### Session Create Request
+
+```json
+{
+  "sessionName": "session1"
+}
+
+```
+
+### Session Load Request
+
+```json
+{
+  "sessionName": "session1"
+}
+
+```
+
+### Session Load Response
+
+```json
+{
+  "sessionName": "session1",
+  "files": [
+    {
+      "name": "example.txt",
+      "path": "/path/to/session1/example.txt",
+      "type": "file",
+      "size": 1024
+    }
+  ]
+}
+
+```
+
+### Methods
+
+- **GET**: Used for retrieving data (e.g., user config, file list, download files, API logs).
+- **POST**: Used for sending data to the server (e.g., update config, AI queries, upload files, create/load sessions).
