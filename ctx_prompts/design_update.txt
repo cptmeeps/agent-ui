@@ -1,0 +1,5 @@
+I would like to update the design doc based on the following:
+
+I would like to add the ability to have 'user sessions' each user session should create a folder in the local file system to contain files created or downloaded during that session. The contents of the folder will be displayed in the UI. The user can load a session by submitting a session name in the UI. The top level folder that contains the session files should match in name to the user submitted name. 
+
+Can you rewrite the entire design to incorporate the necessary changes. The new version should incorporates the additional functionality for user sessions without altering the original design's intent or structure.
