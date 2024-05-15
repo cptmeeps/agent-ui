@@ -62,8 +62,8 @@
         app.run(debug=True)
     ```
 4. Test the request handler.
-    - Run `python app.py`
-    - Use a tool like Postman to send a POST request to `http://127.0.0.1:5000/api/request` with a JSON body.
+    - Run `python3 app.py`
+    - Run `curl -X POST http://127.0.0.1:5000/api/request -H "Content-Type: application/json" -d '{"key": "value"}'`
 
 ### 2.3 Develop API Integration Service
 1. Create a new file for the API integration service.
