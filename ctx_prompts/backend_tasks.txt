@@ -1,0 +1,243 @@
+# Backend Server Development
+
+## Success Criteria
+- A local web server is implemented using Flask.
+- The server can handle HTTP requests and send appropriate responses.
+- The server can integrate with external APIs.
+- The server can interact with the local filesystem.
+- User sessions are managed, and session-specific folders are created.
+- Database interactions are implemented using SQLAlchemy.
+
+## Step by Step Instructions
+
+### 2.1 Implement Local Web Server with Flask
+1. Navigate to the backend directory.
+    - `cd backend`
+2. Ensure the virtual environment is activated.
+    - On Windows: `venv\Scripts\activate`
+    - On macOS/Linux: `source venv/bin/activate`
+3. Create a basic Flask app if not already done.
+    - `touch app.py`
+    - Add the following code to `app.py`:
+      ```python
+      from flask import Flask
+
+      app = Flask(__name__)
+
+      @app.route('/')
+      def home():
+          return "Hello, Flask!"
+
+      if __name__ == '__main__':
+          app.run(debug=True)
+      ```
+4. Run the Flask app to verify it works.
+    - `python app.py`
+    - Open a browser and navigate to `http://127.0.0.1:5000/` to see "Hello, Flask!".
+
+### 2.2 Create Request Handler Module
+1. Create a new file for the request handler.
+    - `touch request_handler.py`
+2. Add the following code to `request_handler.py`:
+    ```python
+    from flask import request, jsonify
+
+    def handle_request():
+        data = request.get_json()
+        response = {"message": "Request received", "data": data}
+        return jsonify(response)
+    ```
+3. Update `app.py` to use the request handler.
+    ```python
+    from flask import Flask
+    from request_handler import handle_request
+
+    app = Flask(__name__)
+
+    @app.route('/api/request', methods=['POST'])
+    def api_request():
+        return handle_request()
+
+    if __name__ == '__main__':
+        app.run(debug=True)
+    ```
+4. Test the request handler.
+    - Run `python app.py`
+    - Use a tool like Postman to send a POST request to `http://127.0.0.1:5000/api/request` with a JSON body.
+
+### 2.3 Develop API Integration Service
+1. Create a new file for the API integration service.
+    - `touch api_integration.py`
+2. Add the following code to `api_integration.py`:
+    ```python
+    import requests
+
+    def call_external_api(endpoint, payload, headers):
+        response = requests.post(endpoint, json=payload, headers=headers)
+        return response.json()
+    ```
+3. Update `request_handler.py` to use the API integration service.
+    ```python
+    from flask import request, jsonify
+    from api_integration import call_external_api
+
+    def handle_request():
+        data = request.get_json()
+        api_response = call_external_api("https://api.example.com/endpoint", data, {"Authorization": "Bearer YOUR_API_KEY"})
+        response = {"message": "Request received", "api_response": api_response}
+        return jsonify(response)
+    ```
+4. Test the API integration service.
+    - Run `python app.py`
+    - Use Postman to send a POST request to `http://127.0.0.1:5000/api/request` with a JSON body and verify the external API response.
+
+### 2.4 Implement Filesystem Service
+1. Create a new file for the filesystem service.
+    - `touch filesystem_service.py`
+2. Add the following code to `filesystem_service.py`:
+    ```python
+    import os
+
+    def save_file(file_path, content):
+        with open(file_path, 'w') as file:
+            file.write(content)
+
+    def read_file(file_path):
+        with open(file_path, 'r') as file:
+            return file.read()
+    ```
+3. Update `request_handler.py` to use the filesystem service.
+    ```python
+    from flask import request, jsonify
+    from api_integration import call_external_api
+    from filesystem_service import save_file, read_file
+
+    def handle_request():
+        data = request.get_json()
+        save_file('data.txt', str(data))
+        file_content = read_file('data.txt')
+        api_response = call_external_api("https://api.example.com/endpoint", data, {"Authorization": "Bearer YOUR_API_KEY"})
+        response = {"message": "Request received", "file_content": file_content, "api_response": api_response}
+        return jsonify(response)
+    ```
+4. Test the filesystem service.
+    - Run `python app.py`
+    - Use Postman to send a POST request to `http://127.0.0.1:5000/api/request` with a JSON body and verify the file content is saved and read correctly.
+
+### 2.5 Create Response Service
+1. Create a new file for the response service.
+    - `touch response_service.py`
+2. Add the following code to `response_service.py`:
+    ```python
+    from flask import jsonify
+
+    def create_response(message, data=None):
+        response = {"message": message, "data": data}
+        return jsonify(response)
+    ```
+3. Update `request_handler.py` to use the response service.
+    ```python
+    from flask import request
+    from api_integration import call_external_api
+    from filesystem_service import save_file, read_file
+    from response_service import create_response
+
+    def handle_request():
+        data = request.get_json()
+        save_file('data.txt', str(data))
+        file_content = read_file('data.txt')
+        api_response = call_external_api("https://api.example.com/endpoint", data, {"Authorization": "Bearer YOUR_API_KEY"})
+        return create_response("Request received", {"file_content": file_content, "api_response": api_response})
+    ```
+4. Test the response service.
+    - Run `python app.py`
+    - Use Postman to send a POST request to `http://127.0.0.1:5000/api/request` with a JSON body and verify the response format.
+
+### 2.6 Develop Session Manager
+1. Create a new file for the session manager.
+    - `touch session_manager.py`
+2. Add the following code to `session_manager.py`:
+    ```python
+    import os
+
+    def create_session_folder(session_name):
+        os.makedirs(session_name, exist_ok=True)
+
+    def get_session_folder(session_name):
+        return os.path.abspath(session_name)
+    ```
+3. Update `request_handler.py` to use the session manager.
+    ```python
+    from flask import request
+    from api_integration import call_external_api
+    from filesystem_service import save_file, read_file
+    from response_service import create_response
+    from session_manager import create_session_folder, get_session_folder
+
+    def handle_request():
+        data = request.get_json()
+        session_name = data.get('session_name', 'default_session')
+        create_session_folder(session_name)
+        session_folder = get_session_folder(session_name)
+        save_file(os.path.join(session_folder, 'data.txt'), str(data))
+        file_content = read_file(os.path.join(session_folder, 'data.txt'))
+        api_response = call_external_api("https://api.example.com/endpoint", data, {"Authorization": "Bearer YOUR_API_KEY"})
+        return create_response("Request received", {"file_content": file_content, "api_response": api_response})
+    ```
+4. Test the session manager.
+    - Run `python app.py`
+    - Use Postman to send a POST request to `http://127.0.0.1:5000/api/request` with a JSON body containing `session_name` and verify the session folder is created and used correctly.
+
+### 2.7 Implement Database Service with SQLAlchemy
+1. Ensure SQLAlchemy is installed and configured as per the previous steps.
+2. Create a new file for the database service.
+    - `touch database_service.py`
+3. Add the following code to `database_service.py`:
+    ```python
+    from app import db
+    from models import UserConfiguration, APIInteractionLog, FileMetadata
+
+    def add_user_configuration(api_key, settings):
+        user_config = UserConfiguration(api_key=api_key, settings=settings)
+        db.session.add(user_config)
+        db.session.commit()
+
+    def get_user_configuration(api_key):
+        return UserConfiguration.query.filter_by(api_key=api_key).first()
+    ```
+4. Update `request_handler.py` to use the database service.
+    ```python
+    from flask import request
+    from api_integration import call_external_api
+    from filesystem_service import save_file, read_file
+    from response_service import create_response
+    from session_manager import create_session_folder, get_session_folder
+    from database_service import add_user_configuration, get_user_configuration
+
+    def handle_request():
+        data = request.get_json()
+        session_name = data.get('session_name', 'default_session')
+        create_session_folder(session_name)
+        session_folder = get_session_folder(session_name)
+        save_file(os.path.join(session_folder, 'data.txt'), str(data))
+        file_content = read_file(os.path.join(session_folder, 'data.txt'))
+        api_response = call_external_api("https://api.example.com/endpoint", data, {"Authorization": "Bearer YOUR_API_KEY"})
+        
+        # Example database interaction
+        add_user_configuration("example_api_key", {"setting1": "value1"})
+        user_config = get_user_configuration("example_api_key")
+        
+        return create_response("Request received", {"file_content": file_content, "api_response": api_response, "user_config": user_config.settings})
+    ```
+5. Test the database service.
+    - Run `python app.py`
+    - Use Postman to send a POST request to `http://127.0.0.1:5000/api/request` with a JSON body and verify the database interactions.
+
+### Organize and Commit
+1. Ensure all changes are properly structured.
+2. Add all changes to git.
+    - `git add .`
+3. Commit the changes.
+    - `git commit -m "Implement backend server with Flask, request handler, API integration, filesystem service, response service, session manager, and database service"`
+4. Push the changes to the remote repository.
+    - `git push origin main`
