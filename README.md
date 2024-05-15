@@ -1,0 +1,1 @@
+The project involves developing an AI agent UI application designed to run locally during the prototyping phase.
